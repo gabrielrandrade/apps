@@ -6,7 +6,7 @@ StatusBar } from "react-native";
 // npm install react-native-vector-icons
 // npx react-native link react-native-vector-icons
 import Icon from "react-native-vector-icons/MaterialIcons";
-import styles from "./assets/styles/styles_aula02";
+import styles from "./assets/styles/styles_aula04";
 // Inicio da class App
 class App extends Component{
     // Construtor de classe, é um metodo especial ultilizado para inicializar o estado do componente
@@ -88,7 +88,7 @@ class App extends Component{
         });
     };
     //Metodo responsavel  por renderizar o 'item' da lista de compra
-    renderItem = ({ item, index })=>{
+    renderItem = ({ item, index })=>(
         //Comprovante: View que contem a estrutura visual do item da lista de compra
         <View style={styles.itemContainer}>
             {/* Botão para alternar o estado "comprado" do item */}
@@ -115,7 +115,7 @@ class App extends Component{
 
             </TouchableOpacity>
         </View>
-    };
+    );
 
     //Metodo responsável por renderizar um separador entre os itens da lista
     renderSeparador = () => {
@@ -131,30 +131,82 @@ class App extends Component{
 
 
     render(){
+        //Instaciando as constantes das variaveis 'item', 'editingItem' e o array 'shoppingList' para o start da aplicação
+        const {item, shoppingList, editingIndex } = this.state;
         return(
-            <SafeAreaView>
+            <SafeAreaView style={styles.container}>
                 {/* Ajustando a barra de status para não interferir no App */}
-                <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
+                <StatusBar barStyle="dark-content" backgroundColor="#f00"/>
                 {/* Cabeçalho */}
-                <View>
-                    <Text> App - Lista de Compras</Text>
+                <View style={styles.header}>
+                    <Text style={styles.title}> App - Lista de Compras</Text>
                 </View>
                 {/* Corpo */}
-                <View>
-                    <TextInput placeholder="Digite o Nome do item!"/>
-                    <TouchableOpacity>
-                        <Text>Adicionar</Text>
+                <View style={styles.body}>
+                    <TextInput style={styles.input} 
+                    placeholder="Digite o Nome do item!"
+                    //Valor atual do campo de entrada, vinculando ao estado 'item'
+                    value={item}
+                    //Atualizando o estado 'item' sempre que o texte é alterado pelo usuario
+                    onChangeText={(text) => this.setState({item:text})}
+                    />
+                    <TouchableOpacity
+                        style={[styles.button,
+                        //Aplica o estilo espeficifico baseado em 'editingIndex';
+                        //Se 'editingIndex' for '-1', aplica o estilo 'addButton'
+                        //Caso contrario, aplica o estilo 'sabeButton'
+                        editingIndex === -1 ? styles.addButton : styles.saveButton,
+                        ]}
+                        /* Define a ação ao pressionar o botão: se 'editingIndex' for '-1', chama a função 'addItem' para adicioinar um novo item
+                            Caso contrario , chama a função 'saveEdit' para salvar as edições feitas no item */
+                        onPress={editingIndex== -1 ? this.addItem : this.saveEdit}
+                    >
+                        <Text style={styles.buttonText}>
+                            {/* O texto exibido no botão depende do valor de 'editingIndex: se'editingIndex for '-1', seu texto será 'adicionar'
+                            caso contrario seu texto será 'salvar edição'*/}
+                            {editingIndex === -1 ? 'Adicionar' : 'Salvar Edição'}
+                        </Text>
                     </TouchableOpacity>
-                    {/* Para não dar erro vamos deixar comentado ainda o FlatList
-                    <FlatList /> */}
+                    <FlatList 
+                        /* 
+                        A propriedade 'data'recebe a lista de itens que será exibida no FlatList
+                        Nesse caso, é a lista 'shoppingList' 
+                        */
+                        data={shoppingList}
+                       /*
+                                A função 'renderItem' é camada para renderizar cada item da lista
+                                Ele recebe o objeto de item e deve retornar o componente que será exibido para cada item
+                       */
+                        renderItem={this.renderItem}
+                      /*
+                                A função 'keyExtractor' extrai uma chave única para cada item
+                                aqui, estamos usando indice do item convertido para string(evita warnings ao usar índice como chave)
+                      */
+                        keyExtractor={(item, index) => index.toString()}
+                     /* 
+                                A propriedade 'ItemSeparatorComponent' permite adicionar um componente
+                                visual entre os itens da lista
+                                Neste caso, 'renderSeparator' é uma função que retorna o separador visual
+                                (como uma linha ou um espaço)
+                     */
+                        ItemSeparatorComponent={this.renderSeparador}
+                        style={styles.list}
+                    />
                 </View>
                 {/* Rodapé */}
-                <View>
-                    <Text>App de lista de Compras Tii07</Text>
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>App de lista de Compras Tii07</Text>
                 </View>
             </SafeAreaView>
         );
     }
 }
+/*
+    Desestruturação da largura da janela(tela) do dispositivo Mobile
+    A função 'Dimensions.get', retorna um objeto contendo 
+    as dimensões da janela e a destruturação extrai apenas a propriedade
+    'widght' de 'window',que representa a largura da janela (tela)
+*/
+const { width } = Dimensions.get('window');
  
 export default App;
