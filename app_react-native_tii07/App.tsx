@@ -7,6 +7,15 @@ StatusBar } from "react-native";
 // npx react-native link react-native-vector-icons
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./assets/styles/styles_aula04";
+
+// Instala  as dependencias de fontes
+//expo install expo-font
+ 
+//Remover em caso de erro com fontes
+// npm unistall expo-app-loading
+// Criar um arquivo com nome ; react-native.config.js
+ 
+import * as Font from 'expo-font';
 // Inicio da class App
 class App extends Component{
     // Construtor de classe, é um metodo especial ultilizado para inicializar o estado do componente
@@ -24,7 +33,44 @@ class App extends Component{
             // 'editingIndex' indica se estamos editando um item especifico da lista de compras
             // Se for '-1', significa que não estamos editando nenhum item no momento
             editingIndex: -1,
+            //variavel para fonte iniciando como falso
+            fontLoaded: false,
         };
+    }
+    /* 
+        O metodo 'componentDidMount' é um metodo do ciclo de vida do react, execultado automaticamente logo após o componente ser montado
+        (adicionando a tela). Ele é comumente usado para realizar carregamentos assíncronos de recursos,
+        como fontes, imagens ou dados de uma API, antes de renderizar o conteúdo do componente
+    */
+    async componentDidMount(){
+        try{
+            /* Carrega as fontes personalizadas de forma assíncrona Font. loadAsyn{}
+            font.loadAsync() retorna uma promise, por isso p uso de 'await' para garantir que as fontes sejam carregadas
+            antes de continuar a execução */
+            await Font.loadAsync({
+                /* O 'Roboto' é o nome da fonte que será usada no aplicativo. O caminho relativo para o arquivo de fonte é fornecido
+                como valor para a chave. Aqui estamos carregando versão regunlar da font 'Roboto' */
+                'Roboto': require('.assets/fonts/Roboto/Roboto-Regular.ttf'),
+                //Aqui estamos carregando a versão em negrito da fonte'roboto' com nome 'Roboto-Bold'
+                'Roboto-Bold': require ('.assets/fonts/Roboto/Roboto-Bold.ttf'),
+                //Aqui estamos carregando a versão em negrito da fonte'roboto' com nome 'Roboto-Bold'
+                'Roboto-Bold-Italic': require ('.assets/fonts/Roboto/Roboto-BoldItalic.ttf'),
+            });
+            /*
+                Após o carregamento das fontes, o estado 'fontLoaded' é atualizado para 'true'
+                isso pode ser usado para garantir que o conteúdo que depende das dontes carregadas
+                seja renderizado apenas depois que fontes estiverem disponíveis
+            */
+           this.setState({ fontLoaded: true });
+        }catch (error){
+            /*
+                Se ocorrer um \erro durante o carregamento das fontes(por exemplo, se o arquivo não for encontrado),
+                o erro é capturado aqui e pode ser tratado conforme necessário(exemplo exibir uma mensagem de erro)
+            */
+           console.error('Erro ao carregar fontes:', error);
+
+        }
+
     }
    
     // Método responsavel por adicionar um item à lista de compras

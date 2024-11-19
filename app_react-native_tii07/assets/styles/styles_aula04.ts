@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'Roboto-Bold',
     },
     body:{
         width: width * 0.9,
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingTop:20,
         width: width * 0.9,
+        fontFamily: 'Roboto-Italic-Bold',
     },
     button:{
         padding: 10,
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'Roboto-Bold'
     },
     list:{
         width: width * 0.9,
@@ -73,6 +76,7 @@ const styles = StyleSheet.create({
     itemText:{
         fontSize: 18,
         flex:1,
+        fontFamily:'Roboto'
     },
     separador:{
         height:1,
@@ -86,6 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'Roboto',
     }
 });
 
